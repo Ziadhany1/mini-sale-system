@@ -62,7 +62,7 @@ class SaleOrder(BaseModel):
     def confirm(self):
         if self.state == "confirmed":
             print(f"SaleOrder {self.name} already confirmed.")
-            return self.invoice  # ترجع نفس الفاتورة الموجودة
+            return self.invoice  
         self.state = "confirmed"
         self.invoice = Invoice(self.customer, order_name=self.name)
         for line in self.lines:
@@ -73,3 +73,4 @@ class SaleOrder(BaseModel):
 
     def __str__(self):
         return f"{super().__str__()}, state={self.state}, total={self.total()}"
+
