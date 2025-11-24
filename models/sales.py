@@ -32,12 +32,14 @@ class SaleOrderLine:
 
 class SaleOrder(BaseModel):
     def __init__(self, customer):
-        super().__init__(f"SO-{self._id}")
-        self._customer = customer
+        self.customer = customer  
+        name = f"SaleOrder-{BaseModel._next_id}"
+        super().__init__(name)
         self.lines = []
         self.state = "draft"
         self.invoice = None
         customer.sale_orders.append(self)
+
 
     @property
     def customer(self):
@@ -56,10 +58,13 @@ class SaleOrder(BaseModel):
 
     def total(self):
         return sum(line.subtotal for line in self.lines)
-
+    
     def confirm(self):
+        if self.state == "confirmed":
+            print(f"SaleOrder {self.name} already confirmed.")
+            return self.invoice  # ترجع نفس الفاتورة الموجودة
         self.state = "confirmed"
-        self.invoice = Invoice(self.customer)
+        self.invoice = Invoice(self.customer, order_name=self.name)
         for line in self.lines:
             inv_line = InvoiceLine(line.product, line.quantity, line._unit_price)
             self.invoice.lines.append(inv_line)

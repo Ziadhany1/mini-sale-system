@@ -41,11 +41,14 @@ class InvoiceLine:
         return f"InvoiceLine(product={self.product.name}, qty={self.quantity}, subtotal={self.subtotal})"
 
 class Invoice(BaseModel):
-    def __init__(self, customer):
-        super().__init__(f"INV-{self._id}")
+    def __init__(self, customer, order_name=None):
         self._customer = customer
         self.lines = []
         self.state = "draft"
+        name = f"Invoice-{BaseModel._next_id}"
+        if order_name:
+            name = f"Invoice-{order_name}"  
+        super().__init__(name)
 
     @property
     def customer(self):

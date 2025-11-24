@@ -3,7 +3,7 @@ from models.base import BaseModel
 class Customer(BaseModel):
     def __init__(self, name, email):
         super().__init__(name)
-        self._email = email
+        self.email = email 
         self.sale_orders = []
         self.invoices = []
 
